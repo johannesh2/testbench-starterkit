@@ -1,4 +1,4 @@
-package com.example.testbench.starterkit;
+package com.example.testbench.starterkit.integrationtest;
 
 import java.io.IOException;
 import java.io.InputStream;

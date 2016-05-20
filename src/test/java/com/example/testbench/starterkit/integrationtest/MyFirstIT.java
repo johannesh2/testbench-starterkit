@@ -1,4 +1,4 @@
-package com.example.testbench.starterkit;
+package com.example.testbench.starterkit.integrationtest;
 
 import org.junit.After;
 import org.junit.Before;

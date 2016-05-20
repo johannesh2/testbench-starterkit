@@ -4,4 +4,5 @@ rebel.xml
 .settings
 .designer
 target
+styles.css
 styles.scss.cache

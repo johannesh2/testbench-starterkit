@@ -1,4 +1,4 @@
-package com.example.testbench.starterkit.integrationtest;
+package my.vaadin.app.test;
 
 import java.io.IOException;
 import java.io.InputStream;

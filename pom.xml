@@ -3,24 +3,22 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.example.testbench</groupId>
+  <groupId>my.vaadin</groupId>
   <artifactId>testbench-starterkit</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>testbench-starterkit</name>
 
   <properties>
-    <vaadin.version>7.6.5</vaadin.version>
+    <vaadin.version>7.6.6</vaadin.version>
     <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
-    <vaadin.plugin.draftCompile>false</vaadin.plugin.draftCompile>
     <jetty.plugin.version>9.2.3.v20140905</jetty.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <my.config.properties.file>profiles/${build.profile.id}/config.properties</my.config.properties.file>
   </properties>
-  
+
   <repositories>
     <repository>
       <id>vaadin-addons</id>
@@ -70,11 +68,12 @@
       <artifactId>vaadin-client</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>com.vaadin</groupId>
-      <artifactId>vaadin-client-compiler</artifactId>
-      <scope>provided</scope>
-    </dependency>
+    <!-- Needed when using the widgetset optimizer (custom ConnectorBundleLoaderFactory). 
+      For widgetset compilation, vaadin-client-compiler is automatically added 
+      on the compilation classpath by vaadin-maven-plugin so normally there is 
+      no need for an explicit dependency. -->
+    <!-- <dependency> <groupId>com.vaadin</groupId> <artifactId>vaadin-client-compiler</artifactId> 
+      <scope>provided</scope> </dependency> -->
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-themes</artifactId>
@@ -86,26 +85,9 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>properties-maven-plugin</artifactId>
-        <version>1.0.0</version>
-        <executions>
-          <execution>
-            <phase>initialize</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
-            <configuration>
-              <files>
-                <file>${my.config.properties.file}</file>
-              </files>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -134,7 +116,7 @@
         <configuration>
           <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
           <webappDirectory>${basedir}/target/classes/VAADIN/widgetsets</webappDirectory>
-          <draftCompile>${vaadin.plugin.draftCompile}</draftCompile>
+          <draftCompile>false</draftCompile>
           <compileReport>false</compileReport>
           <style>OBF</style>
           <strict>true</strict>
@@ -188,13 +170,18 @@
       </plugin>
 
       <!-- The Jetty plugin allows us to easily test the development build 
-          by running jetty:run on the command line. -->
+        by running jetty:run on the command line. -->
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${jetty.plugin.version}</version>
         <configuration>
           <scanIntervalSeconds>2</scanIntervalSeconds>
+          <stopKey>STOP</stopKey>
+          <stopPort>${jetty.stop.port}</stopPort>
+          <httpConnector>
+            <port>${test.port}</port>
+          </httpConnector>
         </configuration>
         <executions>
           <execution>
@@ -206,9 +193,6 @@
             <configuration>
               <scanIntervalSeconds>0</scanIntervalSeconds>
               <daemon>true</daemon>
-              <httpConnector>
-                <port>${jetty.port}</port>
-              </httpConnector>
             </configuration>
           </execution>
           <execution>
@@ -218,22 +202,18 @@
               <goal>stop</goal>
             </goals>
             <configuration>
-              <stopKey>STOP</stopKey>
-              <stopPort>${jetty.stop.port}</stopPort>
+
             </configuration>
           </execution>
         </executions>
       </plugin>
     </plugins>
-    <resources>
-        <resource>
-            <filtering>true</filtering>
-            <directory>src/main/resources</directory>
-        </resource>
-    </resources>
-    <filters>
-      <filter>${my.config.properties.file}</filter>
-    </filters>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
   </build>
 
   <profiles>
@@ -243,13 +223,19 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <build.profile.id>dev</build.profile.id>
+        <test.port>8080</test.port>
+        <jetty.stop.port>8081</jetty.stop.port>
+        <test.headless>false</test.headless>
+        <test.hostname>localhost</test.hostname>
       </properties>
     </profile>
     <profile>
       <id>test</id>
       <properties>
-        <build.profile.id>test</build.profile.id>
+        <test.port>8080</test.port>
+        <jetty.stop.port>8081</jetty.stop.port>
+        <test.headless>true</test.headless>
+        <test.hostname>localhost</test.hostname>
       </properties>
     </profile>
     <profile>
@@ -273,4 +259,5 @@
       </pluginRepositories>
     </profile>
   </profiles>
+
 </project>

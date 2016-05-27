@@ -192,7 +192,6 @@
             </goals>
             <configuration>
               <scanIntervalSeconds>0</scanIntervalSeconds>
-              <daemon>true</daemon>
             </configuration>
           </execution>
           <execution>
@@ -201,9 +200,6 @@
             <goals>
               <goal>stop</goal>
             </goals>
-            <configuration>
-
-            </configuration>
           </execution>
         </executions>
       </plugin>

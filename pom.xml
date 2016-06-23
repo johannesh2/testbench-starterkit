@@ -156,19 +156,6 @@
           </filesets>
         </configuration>
       </plugin>
-      <plugin>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <version>2.19.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
       <!-- The Jetty plugin allows us to easily test the development build 
         by running jetty:run on the command line. -->
       <plugin>
@@ -177,67 +164,12 @@
         <version>${jetty.plugin.version}</version>
         <configuration>
           <scanIntervalSeconds>2</scanIntervalSeconds>
-          <stopKey>STOP</stopKey>
-          <stopPort>${jetty.stop.port}</stopPort>
-          <httpConnector>
-            <port>${test.port}</port>
-          </httpConnector>
         </configuration>
-        <executions>
-          <execution>
-            <id>start-jetty</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>start</goal>
-            </goals>
-            <configuration>
-              <scanIntervalSeconds>0</scanIntervalSeconds>
-              <daemon>true</daemon>
-            </configuration>
-          </execution>
-          <execution>
-            <id>stop-jetty</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>stop</goal>
-            </goals>
-            <configuration>
-
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <filtering>true</filtering>
-      </testResource>
-    </testResources>
   </build>
 
   <profiles>
-    <profile>
-      <id>dev</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <test.port>8080</test.port>
-        <jetty.stop.port>8081</jetty.stop.port>
-        <test.headless>false</test.headless>
-        <test.hostname>localhost</test.hostname>
-      </properties>
-    </profile>
-    <profile>
-      <id>test</id>
-      <properties>
-        <test.port>8080</test.port>
-        <jetty.stop.port>8081</jetty.stop.port>
-        <test.headless>true</test.headless>
-        <test.hostname>localhost</test.hostname>
-      </properties>
-    </profile>
     <profile>
       <!-- Vaadin pre-release repositories -->
       <id>vaadin-prerelease</id>

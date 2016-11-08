@@ -9,6 +9,10 @@
   <version>1.0-SNAPSHOT</version>
   <name>testbench-starterkit</name>
 
+  <prerequisites>
+    <maven>3</maven>
+  </prerequisites>
+
   <properties>
     <vaadin.version>7.6.6</vaadin.version>
     <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
@@ -17,22 +21,13 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
   </properties>
 
   <repositories>
     <repository>
       <id>vaadin-addons</id>
       <url>http://maven.vaadin.com/vaadin-addons</url>
-    </repository>
-    <repository>
-      <id>vaadin-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
     </repository>
   </repositories>
 
@@ -65,15 +60,8 @@
     </dependency>
     <dependency>
       <groupId>com.vaadin</groupId>
-      <artifactId>vaadin-client</artifactId>
-      <scope>provided</scope>
+      <artifactId>vaadin-client-compiled</artifactId>
     </dependency>
-    <!-- Needed when using the widgetset optimizer (custom ConnectorBundleLoaderFactory). 
-      For widgetset compilation, vaadin-client-compiler is automatically added 
-      on the compilation classpath by vaadin-maven-plugin so normally there is 
-      no need for an explicit dependency. -->
-    <!-- <dependency> <groupId>com.vaadin</groupId> <artifactId>vaadin-client-compiler</artifactId> 
-      <scope>provided</scope> </dependency> -->
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-themes</artifactId>
@@ -81,14 +69,14 @@
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-testbench</artifactId>
-      <version>4.1.0.alpha2</version>
+      <version>4.1.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
-      <plugin>
+      <!--<plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.3</version>
@@ -97,7 +85,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.7</version>
-      </plugin>
+      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
@@ -134,11 +122,11 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
+      <!--<plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
         <version>2.4</version>
-      </plugin>
+      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clean-plugin</artifactId>
@@ -236,26 +224,5 @@
         <test.hostname>localhost</test.hostname>
       </properties>
     </profile>
-    <profile>
-      <!-- Vaadin pre-release repositories -->
-      <id>vaadin-prerelease</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-
-      <repositories>
-        <repository>
-          <id>vaadin-prereleases</id>
-          <url>http://maven.vaadin.com/vaadin-prereleases</url>
-        </repository>
-      </repositories>
-      <pluginRepositories>
-        <pluginRepository>
-          <id>vaadin-prereleases</id>
-          <url>http://maven.vaadin.com/vaadin-prereleases</url>
-        </pluginRepository>
-      </pluginRepositories>
-    </profile>
   </profiles>
-
 </project>

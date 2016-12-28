@@ -1,16 +1,13 @@
 package my.vaadin.app;
 
-import java.util.List;
-
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.annotations.Widgetset;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
@@ -24,11 +21,10 @@ import com.vaadin.ui.themes.ValoTheme;
  *
  */
 @Theme("mytheme")
-@Widgetset("my.vaadin.app.MyAppWidgetset")
 public class MyUI extends UI {
 
 	private CustomerService service = CustomerService.getInstance();
-	private Grid grid = new Grid();
+	private Grid<Customer> grid = new Grid<>();
 	private TextField filterText = new TextField();
 	CustomerForm form = new CustomerForm(this);
 
@@ -36,9 +32,10 @@ public class MyUI extends UI {
 	protected void init(VaadinRequest vaadinRequest) {
 		final VerticalLayout layout = new VerticalLayout();
 
-		filterText.setInputPrompt("filter by name...");
-		filterText.addTextChangeListener(e -> {
-			grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAll(e.getText())));
+		filterText.setPlaceholder("filter by name...");
+		filterText.setValueChangeMode(ValueChangeMode.TIMEOUT);
+		filterText.addValueChangeListener(e -> {
+			grid.setItems(service.findAll(e.getValue()));
 		});
 
 		Button clearFilterTextBtn = new Button(FontAwesome.TIMES);
@@ -54,14 +51,16 @@ public class MyUI extends UI {
 
 		Button addCustomerBtn = new Button("Add new customer");
 		addCustomerBtn.addClickListener(e -> {
-			grid.select(null);
+			grid.asSingleSelect().clear();
 			form.setCustomer(new Customer());
 		});
 
 		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn);
 		toolbar.setSpacing(true);
 
-		grid.setColumns("firstName", "lastName", "email");
+		grid.addColumn(Customer::getFirstName).setCaption("First name");
+		grid.addColumn(Customer::getLastName).setCaption("Last name");
+		grid.addColumn(Customer::getEmail).setCaption("Email");
 
 		HorizontalLayout main = new HorizontalLayout(grid, form);
 		main.setSpacing(true);
@@ -79,12 +78,11 @@ public class MyUI extends UI {
 
 		form.setVisible(false);
 
-		grid.addSelectionListener(event -> {
-			if (event.getSelected().isEmpty()) {
-				form.setVisible(false);
+		grid.asSingleSelect().addValueChangeListener(event -> {
+			if (event.getValue() != null) {
+				form.setCustomer(event.getValue());
 			} else {
-				Customer customer = (Customer) event.getSelected().iterator().next();
-				form.setCustomer(customer);
+				form.setVisible(false);
 			}
 		});
 
@@ -92,8 +90,7 @@ public class MyUI extends UI {
 
 	public void updateList() {
 		// fetch list of Customers from service and assign it to Grid
-		List<Customer> customers = service.findAll(filterText.getValue());
-		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, customers));
+		grid.setItems(service.findAll(filterText.getValue()));
 	}
 
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

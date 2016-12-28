@@ -5,7 +5,7 @@ import com.vaadin.annotations.DesignRoot;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.NativeSelect;
-import com.vaadin.ui.PopupDateField;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.declarative.Design;
 
@@ -24,8 +24,8 @@ public class CustomerFormDesign extends FormLayout {
 	protected TextField firstName;
 	protected TextField lastName;
 	protected TextField email;
-	protected NativeSelect status;
-	protected PopupDateField birthDate;
+	protected NativeSelect<CustomerStatus> status;
+	protected DateField dateOfBirth;
 	protected Button save;
 	protected Button delete;
 

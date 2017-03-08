@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-import com.vaadin.data.BeanBinder;
+import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
@@ -13,7 +13,7 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 public class CustomerForm extends CustomerFormDesign {
 
 	CustomerService service = CustomerService.getInstance();
-	private final BeanBinder<Customer> binder = new BeanBinder<>(Customer.class);
+	private final Binder<Customer> binder = new Binder<>(Customer.class);
 	private Customer customer;
 	private MyUI myUI;
 

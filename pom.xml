@@ -14,7 +14,7 @@
   </prerequisites>
 
   <properties>
-    <vaadin.version>8.0.0.beta1</vaadin.version>
+    <vaadin.version>8.0.1</vaadin.version>
     <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
     <jetty.plugin.version>9.2.3.v20140905</jetty.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -81,7 +81,7 @@
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-testbench</artifactId>
-      <version>5.0.0.beta1</version>
+      <version>5.0.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

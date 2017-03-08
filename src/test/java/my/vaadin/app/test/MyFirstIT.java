@@ -9,6 +9,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openqa.selenium.WebDriver;
 
+import com.machinepublishers.jbrowserdriver.JBrowserDriver;
+import com.machinepublishers.jbrowserdriver.RequestHeaders;
+import com.machinepublishers.jbrowserdriver.Settings;
+import com.machinepublishers.jbrowserdriver.UserAgent;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.TextFieldElement;
@@ -20,7 +24,7 @@ public class MyFirstIT extends TestBenchTestCase {
 
 	@Before
 	public void setup() {
-		setDriver(driver = new DriverUtil().getPreferredDriver());
+		setDriver(driver = new DriverUtil().getPreferredDriver().get());
 	}
 
 	@Test
@@ -32,6 +36,7 @@ public class MyFirstIT extends TestBenchTestCase {
 
 	@After
 	public void teardown() {
-		driver.close();
+		driver.quit();
+		//driver.close();
 	}
 }
